@@ -8,7 +8,7 @@
 >
   <div class="iws__media">
     {%- if section.settings.image != blank -%}
-      {%- assign image_alt = section.settings.image.alt | escape -%}
+      {%- assign image_alt = section.settings.image_alt | default: section.settings.image.alt | escape -%}
       <picture>
         {%- if section.settings.image_mobile != blank -%}
           <source
@@ -123,7 +123,7 @@
     {%- if cta_blocks.size > 0 or has_footnotes -%}
       <div class="iws__cta-group">
         {%- if cta_blocks.size > 0 -%}
-          <div class="iws__actions">
+          <div class="iws__actions{% if section.settings.mobile_button_layout == 'full-width' %} iws__actions--mobile-full{% endif %}">
             {%- for block in section.blocks -%}
               {%- if block.type == 'cta' -%}
                 <a
@@ -487,11 +487,11 @@
       gap: 20px;
     }
 
-    .iws__actions {
+    .iws__actions--mobile-full {
       width: 100%;
     }
 
-    .iws__cta {
+    .iws__actions--mobile-full .iws__cta {
       width: 100%;
       justify-content: center;
     }
@@ -638,6 +638,12 @@
       "type": "image_picker",
       "id": "image",
       "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Image alt text",
+      "info": "Describe the image for screen readers. If left blank, the alt set on the media asset is used."
     },
     {
       "type": "image_picker",
@@ -789,6 +795,20 @@
       "unit": "px",
       "default": 0
     },
+    {
+      "type": "header",
+      "content": "Buttons — mobile"
+    },
+    {
+      "type": "select",
+      "id": "mobile_button_layout",
+      "label": "Button width on mobile",
+      "options": [
+        { "value": "full-width", "label": "Full width (stacked)" },
+        { "value": "inline", "label": "Auto (same as desktop)" }
+      ],
+      "default": "full-width"
+    }
   ],
   "blocks": [
     {
