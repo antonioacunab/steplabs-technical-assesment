@@ -1,0 +1,834 @@
+{%- assign superscripts = '¹,²,³,⁴,⁵,⁶,⁷,⁸,⁹' | split: ',' -%}
+
+<section
+  class="iws {{ section.settings.layout_width }}"
+  style="--iws-bg: {{ section.settings.background_color }};"
+  aria-label="{{ section.settings.heading_regular }} {{ section.settings.heading_italic }}"
+>
+  <div class="iws__media">
+    {%- if section.settings.image != blank -%}
+      {%- assign image_alt = section.settings.image.alt | escape -%}
+      {{
+        section.settings.image
+        | image_url: width: 800
+        | image_tag:
+          loading: 'lazy',
+          widths: '400, 600, 800',
+          sizes: '(max-width: 749px) 100vw, 45vw',
+          alt: image_alt,
+          class: 'iws__image'
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'iws__image iws__image--placeholder' }}
+    {%- endif -%}
+  </div>
+
+  <div
+    class="iws__content iws__content--{{ section.settings.content_alignment }}"
+    style="
+      --iws-cpt: {{ section.settings.content_padding_top }}px;
+      --iws-cpr: {{ section.settings.content_padding_right }}px;
+      --iws-cpb: {{ section.settings.content_padding_bottom }}px;
+      --iws-cpl: {{ section.settings.content_padding_left }}px;
+      --iws-cpt-m: {{ section.settings.content_padding_top_mobile }}px;
+      --iws-cpr-m: {{ section.settings.content_padding_right_mobile }}px;
+      --iws-cpb-m: {{ section.settings.content_padding_bottom_mobile }}px;
+      --iws-cpl-m: {{ section.settings.content_padding_left_mobile }}px;
+    "
+  >
+    {%- if section.settings.heading_regular != blank or section.settings.heading_italic != blank -%}
+      <h2 class="iws__heading">
+        {%- if section.settings.heading_regular != blank -%}
+          <span class="iws__heading-regular">{{ section.settings.heading_regular }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading_italic != blank -%}
+          <em class="iws__heading-italic">{{ section.settings.heading_italic }}</em>
+        {%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    {%- assign stat_groups = section.blocks | where: 'type', 'stat_group' -%}
+    {%- if stat_groups.size > 0 -%}
+      {%- assign stat_counter = 0 -%}
+      <div class="iws__stat-groups">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'stat_group' -%}
+            <div class="iws__stat-group" {{ block.shopify_attributes }}>
+              {%- if block.settings.label != blank -%}
+                <h3 class="iws__group-label">{{ block.settings.label }}</h3>
+              {%- endif -%}
+
+              <div class="iws__stats">
+                {%- if block.settings.stat1_value != blank -%}
+                  <div class="iws__stat">
+                    {%- if block.settings.stat1_context != blank -%}
+                      <p class="iws__stat-context">
+                        {{- block.settings.stat1_context -}}
+                        <sup class="iws__sup">{{ superscripts[stat_counter] }}</sup>
+                      </p>
+                    {%- endif -%}
+                    <p class="iws__stat-value">{{ block.settings.stat1_value }}</p>
+                    {%- if block.settings.stat1_description != blank -%}
+                      <p class="iws__stat-description">{{ block.settings.stat1_description }}</p>
+                    {%- endif -%}
+                  </div>
+                  {%- assign stat_counter = stat_counter | plus: 1 -%}
+                {%- endif -%}
+
+                {%- if block.settings.stat2_value != blank -%}
+                  <div class="iws__stat">
+                    {%- if block.settings.stat2_context != blank -%}
+                      <p class="iws__stat-context">
+                        {{- block.settings.stat2_context -}}
+                        <sup class="iws__sup">{{ superscripts[stat_counter] }}</sup>
+                      </p>
+                    {%- endif -%}
+                    <p class="iws__stat-value">{{ block.settings.stat2_value }}</p>
+                    {%- if block.settings.stat2_description != blank -%}
+                      <p class="iws__stat-description">{{ block.settings.stat2_description }}</p>
+                    {%- endif -%}
+                  </div>
+                  {%- assign stat_counter = stat_counter | plus: 1 -%}
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- assign cta_blocks = section.blocks | where: 'type', 'cta' -%}
+    {%- assign has_footnotes = false -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'stat_group' -%}
+        {%- if block.settings.stat1_footnote != blank or block.settings.stat2_footnote != blank -%}
+          {%- assign has_footnotes = true -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if cta_blocks.size > 0 or has_footnotes -%}
+      <div class="iws__cta-group">
+        {%- if cta_blocks.size > 0 -%}
+          <div class="iws__actions">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'cta' -%}
+                <a
+                  href="{{ block.settings.url }}"
+                  class="iws__cta"
+                  {% if block.settings.url == blank %}
+                    aria-disabled="true"
+                  {% endif %}
+                  {{ block.shopify_attributes }}
+                >
+                  {{- block.settings.label -}}
+                  {%- if block.settings.arrow_svg != blank -%}
+                    <span class="iws__cta-icon" aria-hidden="true">{{ block.settings.arrow_svg }}</span>
+                  {%- else -%}
+                    <span class="iws__cta-icon" aria-hidden="true">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </span>
+                  {%- endif -%}
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        {%- if has_footnotes -%}
+          <p class="iws__footnotes">
+            {%- assign stat_counter = 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'stat_group' -%}
+                {%- if block.settings.stat1_footnote != blank or block.settings.stat2_footnote != blank -%}
+                  <span class="iws__footnote-line">
+                    {%- if block.settings.stat1_value != blank -%}
+                      {%- if block.settings.stat1_footnote != blank -%}
+                        <span class="iws__footnote"
+                          ><sup>{{ superscripts[stat_counter] }}</sup>{{ block.settings.stat1_footnote -}}
+                        </span>
+                      {%- endif -%}
+                      {%- assign stat_counter = stat_counter | plus: 1 -%}
+                    {%- endif -%}
+                    {%- if block.settings.stat2_value != blank -%}
+                      {%- if block.settings.stat2_footnote != blank -%}
+                        <span class="iws__footnote"
+                          ><sup>{{ superscripts[stat_counter] }}</sup>{{ block.settings.stat2_footnote -}}
+                        </span>
+                      {%- endif -%}
+                      {%- assign stat_counter = stat_counter | plus: 1 -%}
+                    {%- endif -%}
+                  </span>
+                {%- else -%}
+                  {%- if block.settings.stat1_value != blank -%}
+                    {%- assign stat_counter = stat_counter | plus: 1 -%}
+                  {%- endif -%}
+                  {%- if block.settings.stat2_value != blank -%}
+                    {%- assign stat_counter = stat_counter | plus: 1 -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .iws {
+    display: grid;
+    grid-template-columns: 629.75px 1fr;
+    min-height: 856px;
+    background-color: #fff;
+    padding: 40px 64px;
+    gap: 40px;
+    box-sizing: border-box;
+  }
+
+  .iws--constrained {
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+
+  /* Media */
+  .iws__media {
+    background-color: var(--iws-bg, #fff);
+    height: 768px;
+    overflow: hidden;
+  }
+
+  .iws__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .iws__image--placeholder {
+    max-width: 400px;
+    opacity: 0.4;
+  }
+
+  /* Content */
+  .iws__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 40px;
+    padding: var(--iws-cpt, 0) var(--iws-cpr, 0) var(--iws-cpb, 0) var(--iws-cpl, 0);
+  }
+
+  /* Alignment */
+  .iws__content--left   { text-align: left;   align-items: flex-start; }
+  .iws__content--center { text-align: center;  align-items: center; }
+  .iws__content--right  { text-align: right;  align-items: flex-end; }
+
+  /* Heading */
+  .iws__heading {
+    font-family: var(--font-heading-family);
+    font-size: 40px;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 120%;
+    letter-spacing: 0;
+    color: #1a1a1a;
+    max-width: 614px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .iws__heading-regular {
+    font-style: normal;
+  }
+
+  .iws__heading-italic {
+    font-style: italic;
+  }
+
+  @media screen and (max-width: 989px) {
+    .iws__heading {
+      font-size: clamp(28px, 3.5vw, 40px);
+    }
+  }
+
+  /* Stat groups */
+  .iws__stat-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .iws__stat-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Group label */
+  .iws__group-label {
+    font-family: var(--font-body-family);
+    font-size: 18px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 19.8px;
+    letter-spacing: -0.9px;
+    text-transform: uppercase;
+    color: #262d33;
+    margin: 0;
+    padding-bottom: 11px;
+    border-bottom: 1px solid #262d33;
+  }
+
+  /* Stats grid */
+  .iws__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 24px;
+  }
+
+  .iws__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .iws__stat-context {
+    font-family: var(--font-body-family);
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 19.6px;
+    letter-spacing: -0.7px;
+    color: #262d33;
+    margin: 0;
+  }
+
+  .iws__sup {
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    vertical-align: super;
+    font-size: 0.65em;
+  }
+
+  .iws__stat-value {
+    font-family: var(--font-body-family);
+    font-size: 70px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 77px;
+    letter-spacing: 0.7px;
+    color: #262d33;
+    margin: 0;
+    max-width: 276px;
+  }
+
+  .iws__stat-description {
+    font-family: var(--font-body-family);
+    font-size: 16.1px;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 22.54px;
+    letter-spacing: 0;
+    color: #262d33;
+    margin: 0;
+    max-width: 276px;
+  }
+
+  /* CTA */
+  .iws__cta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 9.19px;
+  }
+
+  .iws__actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .iws__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 27px;
+    border: 1px solid #262d33;
+    border-radius: 50px;
+    font-family: var(--font-body-family);
+    font-size: 16px;
+    font-weight: 500;
+    color: #262d33;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  .iws__cta-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .iws__cta:hover .iws__cta-icon {
+    transform: translateX(3px);
+  }
+
+  .iws__cta:hover {
+    background-color: #262d33;
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .iws__cta:active {
+    transform: translateY(0);
+  }
+
+  .iws__cta[aria-disabled='true'] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Footnotes */
+  .iws__footnotes {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+  }
+
+  .iws__footnote-line {
+    display: block;
+    font-family: var(--font-body-family);
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 15.4px;
+    letter-spacing: 0;
+    color: #262d33;
+  }
+
+  .iws__footnote {
+    display: inline;
+  }
+
+  .iws__footnote sup {
+    font-size: 0.75em;
+    vertical-align: super;
+    line-height: 0;
+  }
+
+  /* Responsive — tablet */
+  @media screen and (max-width: 989px) {
+    .iws {
+      grid-template-columns: 1fr 1fr;
+      min-height: unset;
+      padding: 32px 40px;
+      gap: 24px;
+    }
+
+    .iws__content {
+      gap: 24px;
+    }
+  }
+
+  /* Responsive — mobile */
+  @media screen and (max-width: 749px) {
+    .iws {
+      grid-template-columns: 1fr;
+      padding: 32px 20px;
+      gap: 24px;
+    }
+
+    .iws__media {
+      height: 320px;
+    }
+
+    .iws__content {
+      gap: 20px;
+      padding: var(--iws-cpt-m, 0px) var(--iws-cpr-m, 0px) var(--iws-cpb-m, 0px) var(--iws-cpl-m, 0px);
+    }
+
+    .iws__stats {
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .iws__stat-value {
+      font-size: clamp(36px, 10vw, 70px);
+      line-height: 1.1;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .iws__stats {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .iws__cta {
+      transition: none;
+    }
+
+    .iws__cta-icon {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    var els = document.querySelectorAll('.iws__stat-value');
+    if (!els.length) return;
+
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function parse(text) {
+      var m = text.match(/^([\d.]+)(?:-([\d.]+))?(.*)$/);
+      if (!m) return null;
+      return {
+        n1: parseFloat(m[1]),
+        d1: (m[1].split('.')[1] || '').length,
+        n2: m[2] != null ? parseFloat(m[2]) : null,
+        d2: m[2] != null ? (m[2].split('.')[1] || '').length : 0,
+        suffix: m[3],
+      };
+    }
+
+    function render(parsed, t) {
+      var ease = 1 - Math.pow(1 - t, 3);
+      var v1 = (parsed.n1 * ease).toFixed(parsed.d1);
+      if (parsed.n2 !== null) {
+        return v1 + '-' + (parsed.n2 * ease).toFixed(parsed.d2) + parsed.suffix;
+      }
+      return v1 + parsed.suffix;
+    }
+
+    function run(el, parsed) {
+      var start = null;
+      var duration = 3000;
+      function tick(ts) {
+        if (!start) start = ts;
+        var t = Math.min((ts - start) / duration, 1);
+        el.textContent = render(parsed, t);
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var el = entry.target;
+          var parsed = parse(el.dataset.counter);
+          observer.unobserve(el);
+          if (!parsed || reduced) return;
+          run(el, parsed);
+        });
+      },
+      { threshold: 0.4 }
+    );
+
+    els.forEach(function (el) {
+      el.dataset.counter = el.textContent.trim();
+      observer.observe(el);
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Image with stats",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_regular",
+      "label": "Heading (regular)",
+      "default": "Backed by Science."
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading (italic)",
+      "default": "Proven by Results."
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Layout width",
+      "options": [
+        { "value": "iws--constrained", "label": "1440px (fixed)" },
+        { "value": "iws--full", "label": "Full width" }
+      ],
+      "default": "iws--constrained"
+    },
+    {
+      "type": "text_alignment",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Content padding — desktop"
+    },
+    {
+      "type": "range",
+      "id": "content_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "content_padding_right",
+      "label": "Padding right",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "content_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "content_padding_left",
+      "label": "Padding left",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Content padding — mobile"
+    },
+    {
+      "type": "range",
+      "id": "content_padding_top_mobile",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "content_padding_right_mobile",
+      "label": "Padding right",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "content_padding_bottom_mobile",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "content_padding_left_mobile",
+      "label": "Padding left",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#FFFFFF"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat_group",
+      "name": "Stat group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Group label",
+          "default": "Build lasting strength in just 3 short sessions a week",
+          "info": "Displayed in uppercase above the divider line."
+        },
+        {
+          "type": "header",
+          "content": "Stat 1"
+        },
+        {
+          "type": "text",
+          "id": "stat1_context",
+          "label": "Context",
+          "default": "In a clinical study",
+          "info": "A superscript reference number is added automatically."
+        },
+        {
+          "type": "text",
+          "id": "stat1_value",
+          "label": "Value",
+          "default": "2.0x"
+        },
+        {
+          "type": "textarea",
+          "id": "stat1_description",
+          "label": "Description",
+          "default": "muscle strength increase vs traditional low-load training"
+        },
+        {
+          "type": "text",
+          "id": "stat1_footnote",
+          "label": "Footnote reference",
+          "default": "Yasuda et al., 2010",
+          "info": "Shown at the bottom of the section. Leave blank to omit."
+        },
+        {
+          "type": "header",
+          "content": "Stat 2 (optional)"
+        },
+        {
+          "type": "text",
+          "id": "stat2_context",
+          "label": "Context",
+          "default": "In a systematic review",
+          "info": "Leave 'Value' blank to show only one stat."
+        },
+        {
+          "type": "text",
+          "id": "stat2_value",
+          "label": "Value",
+          "default": "3.2x"
+        },
+        {
+          "type": "textarea",
+          "id": "stat2_description",
+          "label": "Description",
+          "default": "greater muscle mass gains compared to walking or light training without Targeted Compression/BFR"
+        },
+        {
+          "type": "text",
+          "id": "stat2_footnote",
+          "label": "Footnote reference",
+          "default": "Loenneke et al., 2012",
+          "info": "Shown at the bottom of the section. Leave blank to omit."
+        }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "See The Science"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        },
+        {
+          "type": "textarea",
+          "id": "arrow_svg",
+          "label": "Custom arrow SVG",
+          "info": "Paste custom SVG code for the arrow icon. Leave blank to use the default arrow."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with stats",
+      "blocks": [
+        {
+          "type": "stat_group",
+          "settings": {
+            "label": "Build lasting strength in just 3 short sessions a week",
+            "stat1_context": "In a clinical study",
+            "stat1_value": "2.0x",
+            "stat1_description": "muscle strength increase vs traditional low-load training",
+            "stat1_footnote": "Yasuda et al., 2010",
+            "stat2_context": "In a systematic review",
+            "stat2_value": "3.2x",
+            "stat2_description": "greater muscle mass gains compared to walking or light training without Targeted Compression/BFR",
+            "stat2_footnote": "Loenneke et al., 2012"
+          }
+        },
+        {
+          "type": "stat_group",
+          "settings": {
+            "label": "Clinically shown to speed up recovery",
+            "stat1_context": "In a recovery study",
+            "stat1_value": "78%",
+            "stat1_description": "faster muscle recovery time post-exercise with Targeted Compression/BFR compared to passive rest",
+            "stat1_footnote": "Takarada et al., 2000",
+            "stat2_context": "In a clinical trial",
+            "stat2_value": "40-50%",
+            "stat2_description": "pain reduction reported in individuals with chronic musculoskeletal pain",
+            "stat2_footnote": "Hughes et al., 2017"
+          }
+        },
+        {
+          "type": "cta",
+          "settings": {
+            "label": "See The Science"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
