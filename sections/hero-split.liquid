@@ -1,0 +1,812 @@
+<section
+  class="hero-split"
+  style="--hs-bg: {{ section.settings.background_color }}; --hs-accent: {{ section.settings.accent_color }};"
+  aria-label="{{ section.settings.heading_regular }} {{ section.settings.heading_italic }}"
+>
+  <div class="hero-split__inner {{ section.settings.layout_width }}">
+    {% comment %} Content alignment and padding are managed here {% endcomment %}
+    <div
+      class="hero-split__content hero-split__content--{{ section.settings.content_alignment }}"
+      style="
+        --hs-cpt: {{ section.settings.content_padding_top }}px;
+        --hs-cpr: {{ section.settings.content_padding_right }}px;
+        --hs-cpb: {{ section.settings.content_padding_bottom }}px;
+        --hs-cpl: {{ section.settings.content_padding_left }}px;
+        --hs-cpt-m: {{ section.settings.content_padding_top_mobile }}px;
+        --hs-cpr-m: {{ section.settings.content_padding_right_mobile }}px;
+        --hs-cpb-m: {{ section.settings.content_padding_bottom_mobile }}px;
+        --hs-cpl-m: {{ section.settings.content_padding_left_mobile }}px;
+      "
+    >
+      {%- if section.settings.badge_text != blank -%}
+        <div
+          class="hero-split__badge"
+          aria-label="{{ 'sections.hero_split.badge_aria' | t: stars: section.settings.star_count, text: section.settings.badge_text }}"
+        >
+          <span class="hero-split__stars" aria-hidden="true">
+            {%- for i in (1..section.settings.star_count) -%}
+              <svg
+                width="14"
+                height="13"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                focusable="false"
+              >
+                <path d="M8 1L10.163 5.279L15 6.006L11.5 9.378L12.326 14L8 11.779L3.674 14L4.5 9.378L1 6.006L5.837 5.279L8 1Z" fill="var(--hs-accent)" stroke="var(--hs-accent)" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+            {%- endfor -%}
+          </span>
+          <span class="hero-split__badge-text">{{ section.settings.badge_text }}</span>
+        </div>
+      {%- endif -%}
+
+      <h1 class="hero-split__heading">
+        {%- if section.settings.heading_regular != blank -%}
+          <span class="hero-split__heading-regular">{{ section.settings.heading_regular }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading_italic != blank -%}
+          <em class="hero-split__heading-italic">{{ section.settings.heading_italic }}</em>
+        {%- endif -%}
+      </h1>
+
+      {%- if section.settings.subtext != blank -%}
+        <p class="hero-split__body">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+
+      {%- assign cta_blocks = section.blocks | where: 'type', 'cta' -%}
+      {%- if cta_blocks.size > 0 -%}
+        <div class="hero-split__actions">
+          {%- for block in cta_blocks -%}
+            <a
+              href="{{ block.settings.url }}"
+              class="hero-split__cta hero-split__cta--{{ block.settings.style }}"
+              style="--cta-py: {{ block.settings.padding_y }}px; --cta-px: {{ block.settings.padding_x }}px;"
+              {% if block.settings.url == blank %}
+                aria-disabled="true"
+              {% endif %}
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.label }}
+            </a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_guarantee and section.settings.guarantee_text != blank -%}
+        <p class="hero-split__guarantee">
+          <span class="hero-split__guarantee-icon" aria-hidden="true">
+            {%- if section.settings.guarantee_icon_svg != blank -%}
+              {{ section.settings.guarantee_icon_svg }}
+            {%- else -%}
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                focusable="false"
+              >
+                <path d="M9 1C9 1 2 4 2 9.5C2 13.09 5.13 16 9 16C12.87 16 16 13.09 16 9.5C16 4 9 1 9 1Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M6 9L8 11L12 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            {%- endif -%}
+          </span>
+          {{ section.settings.guarantee_text }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="hero-split__features" role="list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'feature' -%}
+              <li class="hero-split__feature" {{ block.shopify_attributes }}>
+                <span class="hero-split__feature-icon" aria-hidden="true">
+                  {%- if block.settings.custom_icon_svg != blank -%}
+                    {{ block.settings.custom_icon_svg }}
+                  {%- else -%}
+                    {%- case block.settings.icon -%}
+                      {%- when 'target' -%}
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          focusable="false"
+                        >
+                          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+                        </svg>
+                      {%- when 'arrows' -%}
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          focusable="false"
+                        >
+                          <path d="M4 8H20M20 8L16 4M20 8L16 12M20 16H4M4 16L8 12M4 16L8 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      {%- when 'shield' -%}
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          focusable="false"
+                        >
+                          <path d="M12 2L4 6V12C4 16.42 7.58 20.5 12 22C16.42 20.5 20 16.42 20 12V6L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                      {%- when 'lightning' -%}
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          focusable="false"
+                        >
+                          <path d="M13 2L4 14H12L11 22L20 10H12L13 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                      {%- when 'heart' -%}
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          focusable="false"
+                        >
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                    {%- endcase -%}
+                  {%- endif -%}
+                </span>
+                <span class="hero-split__feature-text">{{ block.settings.text }}</span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+
+    <div class="hero-split__media">
+      {%- if section.settings.image != blank -%}
+        {%- assign image_alt = section.settings.image.alt | escape -%}
+        {{
+          section.settings.image
+          | image_url: width: 720
+          | image_tag:
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '375, 540, 720',
+            sizes: '(max-width: 749px) 100vw, 50vw',
+            alt: image_alt,
+            class: 'hero-split__image'
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'hero-split__image hero-split__image--placeholder' }}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .hero-split {
+    background-color: var(--hs-bg, #f9f5f3);
+  }
+
+  .hero-split__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 720px;
+  }
+
+  .hero-split--constrained {
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+
+  .hero-split__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0;
+    padding: var(--hs-cpt, 60px) var(--hs-cpr, 56px) var(--hs-cpb, 60px) var(--hs-cpl, 56px);
+  }
+
+  .hero-split__media {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-split__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .hero-split__image--placeholder {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Alignment */
+  .hero-split__content--left {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .hero-split__content--center {
+    text-align: center;
+    align-items: center;
+  }
+  .hero-split__content--right {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  /* Badge */
+  .hero-split__badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-split__stars {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .hero-split__badge-text {
+    font-family: var(--font-heading-family);
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 150%;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #3d3d3d;
+  }
+
+  /* Heading */
+  .hero-split__heading {
+    font-family: var(--font-heading-family);
+    font-size: 48px;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 120%;
+    letter-spacing: 0;
+    text-transform: capitalize;
+    color: #363636;
+    max-width: 576px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-split__heading-regular {
+    font-style: normal;
+  }
+
+  .hero-split__heading-italic {
+    font-style: italic;
+  }
+
+  @media screen and (max-width: 989px) {
+    .hero-split__heading {
+      font-size: clamp(32px, 4.5vw, 48px);
+    }
+  }
+
+  /* Body */
+  .hero-split__body {
+    font-family: var(--font-heading-family);
+    font-size: 16px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 150%;
+    letter-spacing: 0;
+    color: #717171;
+    margin: 0;
+    max-width: 415px;
+    padding-top: 8px;
+    padding-bottom: 32px;
+  }
+
+  /* CTAs */
+  .hero-split__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hero-split__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--cta-py, 9px) var(--cta-px, 26px);
+    border-radius: 100px;
+    font-family: var(--font-body-family);
+    font-size: 16px;
+    font-weight: 500;
+    font-style: normal;
+    line-height: 22px;
+    letter-spacing: -0.48px;
+    vertical-align: middle;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+  }
+
+  .hero-split__cta:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+  }
+
+  .hero-split__cta:active {
+    transform: translateY(0);
+  }
+
+  .hero-split__cta--primary {
+    background-color: var(--hs-accent, #e10017);
+    color: #fff;
+    border: 2px solid transparent;
+  }
+
+  .hero-split__cta--secondary {
+    background-color: transparent;
+    color: var(--hs-accent, #e10017);
+    border: 2px solid var(--hs-accent, #e10017);
+  }
+
+  .hero-split__cta[aria-disabled='true'] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Guarantee */
+  .hero-split__guarantee {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    line-height: 1;
+    color: #555;
+    margin: 0;
+    padding-top: 8px;
+    padding-bottom: 16px;
+  }
+
+  .hero-split__guarantee-icon {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: #555;
+  }
+
+  /* Features */
+  .hero-split__features {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 32px 0;
+    flex-wrap: wrap;
+  }
+
+  .hero-split__feature {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    width: 176px;
+    flex-shrink: 0;
+  }
+
+  .hero-split__feature-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 42px;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-split__feature-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-split__feature-text {
+    font-family: var(--font-heading-family);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0;
+    color: #1a1a1a;
+  }
+
+  /* Responsive — tablet */
+  @media screen and (max-width: 989px) {
+    .hero-split__inner {
+      grid-template-columns: 1fr 1fr;
+      min-height: 560px;
+    }
+
+    .hero-split__content {
+      padding: 40px 32px;
+      gap: 16px;
+    }
+  }
+
+  /* Responsive — mobile */
+  @media screen and (max-width: 749px) {
+    .hero-split__inner {
+      grid-template-columns: 1fr;
+      min-height: unset;
+    }
+
+    .hero-split__media {
+      order: -1;
+      height: 300px;
+      position: relative;
+    }
+
+    .hero-split__content {
+      padding: var(--hs-cpt-m, 36px) var(--hs-cpr-m, 20px) var(--hs-cpb-m, 36px) var(--hs-cpl-m, 20px);
+    }
+
+    .hero-split__body {
+      max-width: 100%;
+    }
+
+    .hero-split__features {
+      gap: 16px;
+    }
+
+    .hero-split__feature {
+      width: auto;
+      flex: 1;
+      min-width: 140px;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-split__cta {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero split",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Layout width",
+      "options": [
+        { "value": "hero-split--constrained", "label": "1440px (fixed)" },
+        { "value": "hero-split--full", "label": "Full width" }
+      ],
+      "default": "hero-split--full"
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "range",
+      "id": "star_count",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Trusted by 1,000+ happy customers"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_regular",
+      "label": "Heading (regular)",
+      "default": "Wake Up The"
+    },
+    {
+      "type": "text",
+      "id": "heading_italic",
+      "label": "Heading (italic)",
+      "default": "Muscles That Matter."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Description",
+      "default": "Suji delivers science-backed targeted compression — pain relief, muscle activation, and lasting strength in minutes, right from home."
+    },
+    {
+      "type": "header",
+      "content": "Guarantee"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guarantee",
+      "label": "Show guarantee badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Guarantee text",
+      "default": "30-day money back guarantee"
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee_icon_svg",
+      "label": "Custom guarantee icon (SVG)",
+      "info": "Paste a valid SVG string. If provided, it replaces the default icon."
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text_alignment",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Content padding — desktop"
+    },
+    {
+      "type": "range",
+      "id": "content_padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "content_padding_right",
+      "label": "Padding right",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "content_padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "content_padding_left",
+      "label": "Padding left",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "header",
+      "content": "Content padding — mobile"
+    },
+    {
+      "type": "range",
+      "id": "content_padding_top_mobile",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "content_padding_right_mobile",
+      "label": "Padding right",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "content_padding_bottom_mobile",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "content_padding_left_mobile",
+      "label": "Padding left",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Content background",
+      "default": "#F9F5F3"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#E10017"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "cta",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shop now"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Style",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "range",
+          "id": "padding_y",
+          "label": "Padding vertical",
+          "min": 4,
+          "max": 32,
+          "step": 1,
+          "unit": "px",
+          "default": 9
+        },
+        {
+          "type": "range",
+          "id": "padding_x",
+          "label": "Padding horizontal",
+          "min": 8,
+          "max": 64,
+          "step": 1,
+          "unit": "px",
+          "default": 26
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "target", "label": "Target" },
+            { "value": "arrows", "label": "Arrows" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "lightning", "label": "Lightning" },
+            { "value": "heart", "label": "Heart" }
+          ],
+          "default": "target"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Activates Muscles & Builds Strength"
+        },
+        {
+          "type": "textarea",
+          "id": "custom_icon_svg",
+          "label": "Custom icon (SVG)",
+          "info": "Paste a valid SVG string. If provided, it takes priority over the icon selected above."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero split",
+      "blocks": [
+        {
+          "type": "cta",
+          "settings": {
+            "label": "Try Suji",
+            "style": "primary"
+          }
+        },
+        {
+          "type": "cta",
+          "settings": {
+            "label": "How It Works",
+            "style": "secondary"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "target",
+            "text": "Activates Muscles & Builds Strength"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "arrows",
+            "text": "Boosts Recovery & Circulation"
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "text": "Supports Healthy Joints & Movement"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
