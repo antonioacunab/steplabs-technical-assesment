@@ -59,12 +59,10 @@
         <div class="hero-split__actions">
           {%- for block in cta_blocks -%}
             <a
-              href="{{ block.settings.url }}"
+              {% if block.settings.url != blank %}href="{{ block.settings.url }}"{% endif %}
               class="hero-split__cta hero-split__cta--{{ block.settings.style }}"
               style="--cta-py: {{ block.settings.padding_y }}px; --cta-px: {{ block.settings.padding_x }}px;"
-              {% if block.settings.url == blank %}
-                aria-disabled="true"
-              {% endif %}
+              {% if block.settings.url == blank %}aria-disabled="true"{% endif %}
               {{ block.shopify_attributes }}
             >
               {{ block.settings.label }}
@@ -324,7 +322,7 @@
   .hero-split__actions {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     flex-wrap: wrap;
   }
 
@@ -368,8 +366,8 @@
   }
 
   .hero-split__cta[aria-disabled='true'] {
-    pointer-events: none;
     opacity: 0.5;
+    cursor: default;
   }
 
   /* Guarantee */
@@ -456,7 +454,8 @@
 
     .hero-split__media {
       order: -1;
-      height: 300px;
+      height: auto;
+      aspect-ratio: 1 / 1;
       position: relative;
     }
 
@@ -466,16 +465,25 @@
 
     .hero-split__body {
       max-width: 100%;
+      padding-top: 4px;
+      padding-bottom: 16px;
+    }
+
+    .hero-split__guarantee {
+      padding-top: 4px;
+      padding-bottom: 8px;
     }
 
     .hero-split__features {
       gap: 16px;
+      padding-top: 22px;
+      padding-bottom: 22px;
     }
 
     .hero-split__feature {
       width: auto;
-      flex: 1;
-      min-width: 140px;
+      flex: 0 0 calc(50% - 8px);
+      min-width: 0;
     }
   }
 
@@ -494,33 +502,13 @@
   "class": "section",
   "settings": [
     {
-      "type": "select",
-      "id": "layout_width",
-      "label": "Layout width",
-      "options": [
-        { "value": "hero-split--constrained", "label": "1440px (fixed)" },
-        { "value": "hero-split--full", "label": "Full width" }
-      ],
-      "default": "hero-split--full"
-    },
-    {
       "type": "header",
-      "content": "Badge"
+      "content": "Media"
     },
     {
-      "type": "range",
-      "id": "star_count",
-      "label": "Stars",
-      "min": 0,
-      "max": 5,
-      "step": 1,
-      "default": 5
-    },
-    {
-      "type": "text",
-      "id": "badge_text",
-      "label": "Badge text",
-      "default": "Trusted by 1,000+ happy customers"
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
     },
     {
       "type": "header",
@@ -546,6 +534,41 @@
     },
     {
       "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Content background",
+      "default": "#F9F5F3"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#E10017"
+    },
+    {
+      "type": "header",
+      "content": "Badge"
+    },
+    {
+      "type": "range",
+      "id": "star_count",
+      "label": "Stars",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "Trusted by 1,000+ happy customers"
+    },
+    {
+      "type": "header",
       "content": "Guarantee"
     },
     {
@@ -567,19 +590,20 @@
       "info": "Paste a valid SVG string. If provided, it replaces the default icon."
     },
     {
-      "type": "header",
-      "content": "Media"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image"
-    },
-    {
       "type": "text_alignment",
       "id": "content_alignment",
       "label": "Content alignment",
       "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Layout width",
+      "options": [
+        { "value": "hero-split--constrained", "label": "1440px (fixed)" },
+        { "value": "hero-split--full", "label": "Full width" }
+      ],
+      "default": "hero-split--full"
     },
     {
       "type": "header",
@@ -669,22 +693,6 @@
       "unit": "px",
       "default": 20
     },
-    {
-      "type": "header",
-      "content": "Colors"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Content background",
-      "default": "#F9F5F3"
-    },
-    {
-      "type": "color",
-      "id": "accent_color",
-      "label": "Accent color",
-      "default": "#E10017"
-    }
   ],
   "blocks": [
     {
