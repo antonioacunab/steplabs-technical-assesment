@@ -66,6 +66,7 @@
       ],
       "settings": {
         "image": "shopify://shop_images/93703dce63a84c088871a7cc4f9476af.mp4.png",
+        "image_alt": "A man using gym equipment",
         "heading_regular": "Wake Up The",
         "heading_italic": "Muscles That Matter.",
         "subtext": "Suji delivers science-backed targeted compression — pain relief, muscle activation, and lasting strength in minutes, right from home.",
@@ -85,7 +86,8 @@
         "content_padding_top_mobile": 36,
         "content_padding_right_mobile": 20,
         "content_padding_bottom_mobile": 36,
-        "content_padding_left_mobile": 20
+        "content_padding_left_mobile": 20,
+        "mobile_button_layout": "full-width"
       }
     },
     "image-with-stats": {
@@ -135,6 +137,8 @@
       ],
       "settings": {
         "image": "shopify://shop_images/Group_2864_1_14f58c9d-9a78-473d-981d-6121d4f3cb0e_png.png",
+        "image_alt": "Gym equipment and app",
+        "image_mobile": "shopify://shop_images/Group_2864_1_14f58c9d-9a78-473d-981d-6121d4f3cb0e_png.jpg",
         "heading_regular": "Backed by Science.",
         "heading_italic": "Proven by Results.",
         "background_color": "#ffffff",
@@ -148,7 +152,8 @@
         "content_padding_top_mobile": 0,
         "content_padding_right_mobile": 0,
         "content_padding_bottom_mobile": 0,
-        "content_padding_left_mobile": 0
+        "content_padding_left_mobile": 0,
+        "mobile_button_layout": "full-width"
       }
     }
   },
