@@ -498,6 +498,23 @@
   }
 
 
+  /* Entrance animation */
+  @keyframes iws-fade-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes iws-slide-in {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .iws--animated .iws__media                      { animation: iws-slide-in 0.6s ease backwards 0s; }
+  .iws--animated .iws__heading                    { animation: iws-fade-up  0.5s ease backwards 0.1s; }
+  .iws--animated .iws__stat-group:nth-child(1)    { animation: iws-fade-up  0.5s ease backwards 0.2s; }
+  .iws--animated .iws__stat-group:nth-child(2)    { animation: iws-fade-up  0.5s ease backwards 0.3s; }
+  .iws--animated .iws__cta-group                  { animation: iws-fade-up  0.5s ease backwards 0.4s; }
+
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .iws__cta {
@@ -506,6 +523,13 @@
 
     .iws__cta-icon {
       transition: none;
+    }
+
+    .iws--animated .iws__media,
+    .iws--animated .iws__heading,
+    .iws--animated .iws__stat-group,
+    .iws--animated .iws__cta-group {
+      animation: none;
     }
   }
 {% endstylesheet %}
@@ -570,6 +594,33 @@
       el.dataset.duration = section ? section.dataset.animationDuration : '3000';
       observer.observe(el);
     });
+  })();
+
+  (function () {
+    function init() {
+      var section = document.querySelector('.iws');
+      if (!section) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('iws--animated');
+            observer.unobserve(entry.target);
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      observer.observe(section);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   })();
 {% endjavascript %}
 
