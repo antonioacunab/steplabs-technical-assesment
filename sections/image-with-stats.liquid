@@ -3,21 +3,34 @@
 <section
   class="iws {{ section.settings.layout_width }}"
   style="--iws-bg: {{ section.settings.background_color }};"
+  data-animation-duration="{{ section.settings.animation_duration }}"
   aria-label="{{ section.settings.heading_regular }} {{ section.settings.heading_italic }}"
 >
   <div class="iws__media">
     {%- if section.settings.image != blank -%}
       {%- assign image_alt = section.settings.image.alt | escape -%}
-      {{
-        section.settings.image
-        | image_url: width: 800
-        | image_tag:
-          loading: 'lazy',
-          widths: '400, 600, 800',
-          sizes: '(max-width: 749px) 100vw, 45vw',
-          alt: image_alt,
-          class: 'iws__image'
-      }}
+      <picture>
+        {%- if section.settings.image_mobile != blank -%}
+          <source
+            media="(max-width: 749px)"
+            srcset="
+              {{ section.settings.image_mobile | image_url: width: 375 }} 375w,
+              {{ section.settings.image_mobile | image_url: width: 750 }} 750w
+            "
+            sizes="100vw"
+          >
+        {%- endif -%}
+        {{
+          section.settings.image
+          | image_url: width: 800
+          | image_tag:
+            loading: 'lazy',
+            widths: '400, 600, 800',
+            sizes: '(max-width: 749px) 100vw, 45vw',
+            alt: image_alt,
+            class: 'iws__image'
+        }}
+      </picture>
     {%- else -%}
       {{ 'product-1' | placeholder_svg_tag: 'iws__image iws__image--placeholder' }}
     {%- endif -%}
@@ -114,11 +127,9 @@
             {%- for block in section.blocks -%}
               {%- if block.type == 'cta' -%}
                 <a
-                  href="{{ block.settings.url }}"
+                  {% if block.settings.url != blank %}href="{{ block.settings.url }}"{% endif %}
                   class="iws__cta"
-                  {% if block.settings.url == blank %}
-                    aria-disabled="true"
-                  {% endif %}
+                  {% if block.settings.url == blank %}aria-disabled="true"{% endif %}
                   {{ block.shopify_attributes }}
                 >
                   {{- block.settings.label -}}
@@ -351,7 +362,7 @@
 
   .iws__actions {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     flex-wrap: wrap;
   }
 
@@ -374,7 +385,13 @@
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
+    color: inherit;
     transition: transform 0.2s ease;
+  }
+
+  .iws__cta-icon svg path {
+    stroke: currentColor;
+    transition: stroke 0.2s ease;
   }
 
   .iws__cta:hover .iws__cta-icon {
@@ -392,8 +409,8 @@
   }
 
   .iws__cta[aria-disabled='true'] {
-    pointer-events: none;
     opacity: 0.5;
+    cursor: default;
   }
 
   /* Footnotes */
@@ -457,20 +474,29 @@
 
     .iws__stats {
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 24px;
     }
 
     .iws__stat-value {
       font-size: clamp(36px, 10vw, 70px);
       line-height: 1.1;
     }
-  }
 
-  @media screen and (max-width: 480px) {
-    .iws__stats {
-      grid-template-columns: 1fr;
+    .iws__cta-group {
+      align-self: stretch;
+      gap: 20px;
+    }
+
+    .iws__actions {
+      width: 100%;
+    }
+
+    .iws__cta {
+      width: 100%;
+      justify-content: center;
     }
   }
+
 
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
@@ -514,7 +540,7 @@
 
     function run(el, parsed) {
       var start = null;
-      var duration = 3000;
+      var duration = parseInt(el.dataset.duration, 10) || 3000;
       function tick(ts) {
         if (!start) start = ts;
         var t = Math.min((ts - start) / duration, 1);
@@ -540,6 +566,8 @@
 
     els.forEach(function (el) {
       el.dataset.counter = el.textContent.trim();
+      var section = el.closest('.iws');
+      el.dataset.duration = section ? section.dataset.animationDuration : '3000';
       observer.observe(el);
     });
   })();
@@ -551,6 +579,21 @@
   "tag": "section",
   "class": "section",
   "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image (mobile)",
+      "info": "Optional. Shown on screens ≤ 749px. Horizontal images work best."
+    },
     {
       "type": "header",
       "content": "Heading"
@@ -569,12 +612,33 @@
     },
     {
       "type": "header",
-      "content": "Media"
+      "content": "Colors"
     },
     {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image"
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "label": "Count-up duration",
+      "min": 500,
+      "max": 5000,
+      "step": 500,
+      "unit": "ms",
+      "default": 3000
+    },
+    {
+      "type": "text_alignment",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "default": "left"
     },
     {
       "type": "select",
@@ -585,12 +649,6 @@
         { "value": "iws--full", "label": "Full width" }
       ],
       "default": "iws--constrained"
-    },
-    {
-      "type": "text_alignment",
-      "id": "content_alignment",
-      "label": "Content alignment",
-      "default": "left"
     },
     {
       "type": "header",
@@ -680,16 +738,6 @@
       "unit": "px",
       "default": 0
     },
-    {
-      "type": "header",
-      "content": "Colors"
-    },
-    {
-      "type": "color",
-      "id": "background_color",
-      "label": "Section background",
-      "default": "#FFFFFF"
-    }
   ],
   "blocks": [
     {
