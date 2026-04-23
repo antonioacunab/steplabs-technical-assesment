@@ -267,6 +267,9 @@
     }
   },
   "sections": {
+    "hero_split": {
+      "badge_aria": "Rated {{ stars }} out of 5 stars. {{ text }}"
+    },
     "announcements": {
       "previous_announcement": "Previous announcement",
       "next_announcement": "Next announcement",
