@@ -23,6 +23,26 @@ cd steplabs-shopify-technical-assesment
 shopify theme dev
 ```
 
+## Sections
+
+### `hero-split`
+
+50/50 split hero with configurable content panel and full-bleed image. Supports dynamic CTA and feature item blocks.
+
+### `image-with-stats`
+
+Science/stats section with a fixed-size image panel and dynamic stat group blocks. Includes automatic superscript generation and count-up animation on scroll.
+
+## Known behaviours & decisions
+
+### Custom SVG icons (`hero-split`)
+
+Figma exports SVGs with short sequential IDs (`id="a"`, `id="b"`) and redundant `<clipPath>` wrappers that clip to the same bounds as the `viewBox`. When pasting the same icon multiple times, those IDs collide in the HTML document and the browser misapplies clip paths.
+
+**Recommended export process:** Run the SVG through [SVGO](https://svgomg.net) with "Remove useless defs" and "Remove empty containers" enabled before pasting. This strips the redundant wrappers and eliminates the ID conflict. Alternatively, remove the `<g clip-path>` wrappers and `<defs>` block manually — they are not needed for icon rendering.
+
+For `currentColor` support (icon color inherits from the surrounding text), ensure the icon's main `<path>` uses `fill="currentColor"` instead of a hardcoded hex value.
+
 ## Theme architecture
 
 ```
