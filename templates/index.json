@@ -1,210 +1,92 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "hero-split": {
+      "type": "hero-split",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "cta-1": {
+          "type": "cta",
           "settings": {
-            "heading": "Image banner",
-            "heading_size": "h0"
+            "label": "Try Suji",
+            "style": "primary",
+            "padding_y": 9,
+            "padding_x": 26
           }
         },
-        "text": {
-          "type": "text",
+        "cta-2": {
+          "type": "cta",
           "settings": {
-            "text": "Give customers details about the banner image(s) or content on the template.",
-            "text_style": "body"
+            "label": "How It Works",
+            "style": "secondary",
+            "padding_y": 10,
+            "padding_x": 27
           }
         },
-        "button": {
-          "type": "buttons",
+        "feature-1": {
+          "type": "feature",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "icon": "target",
+            "text": "Activates Muscles & Builds Strength"
+          }
+        },
+        "feature-2": {
+          "type": "feature",
+          "settings": {
+            "icon": "arrows",
+            "text": "Boosts Recovery & Circulation"
+          }
+        },
+        "feature-3": {
+          "type": "feature",
+          "settings": {
+            "icon": "shield",
+            "text": "Supports Healthy Joints & Movement"
           }
         }
       },
-      "block_order": [
-        "heading",
-        "text",
-        "button"
-      ],
-      "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
-      }
+      "block_order": ["cta-1", "cta-2", "feature-1", "feature-2", "feature-3"],
+      "settings": {}
     },
-    "rich_text": {
-      "type": "rich-text",
+    "image-with-stats": {
+      "type": "image-with-stats",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "stat-group-1": {
+          "type": "stat_group",
           "settings": {
-            "heading": "Talk about your brand",
-            "heading_size": "h1"
+            "label": "Build lasting strength in just 3 short sessions a week",
+            "stat1_context": "In a clinical study",
+            "stat1_value": "2.0x",
+            "stat1_description": "muscle strength increase vs traditional low-load training",
+            "stat1_footnote": "Yasuda et al., 2010",
+            "stat2_context": "In a systematic review",
+            "stat2_value": "3.2x",
+            "stat2_description": "greater muscle mass gains compared to walking or light training without Targeted Compression/BFR",
+            "stat2_footnote": "Loenneke et al., 2012"
           }
         },
-        "text": {
-          "type": "text",
+        "stat-group-2": {
+          "type": "stat_group",
           "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.<\/p>"
+            "label": "Clinically shown to speed up recovery",
+            "stat1_context": "In a recovery study",
+            "stat1_value": "78%",
+            "stat1_description": "faster muscle recovery time post-exercise with Targeted Compression/BFR compared to passive rest",
+            "stat1_footnote": "Takarada et al., 2000",
+            "stat2_context": "In a clinical trial",
+            "stat2_value": "40-50%",
+            "stat2_description": "pain reduction reported in individuals with chronic musculoskeletal pain",
+            "stat2_footnote": "Hughes et al., 2017"
+          }
+        },
+        "cta-1": {
+          "type": "cta",
+          "settings": {
+            "label": "See The Science"
           }
         }
       },
-      "block_order": [
-        "heading",
-        "text"
-      ],
-      "settings": {
-        "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 0
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "show_view_all": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "columns_mobile": "2",
-        "padding_top": 28,
-        "padding_bottom": 36
-      }
-    },
-    "collage": {
-      "type": "collage",
-      "blocks": {
-        "collection-0": {
-          "type": "collection",
-          "settings": {
-            "collection": ""
-          }
-        },
-        "product": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "second_image": false
-          }
-        },
-        "collection-1": {
-          "type": "collection",
-          "settings": {
-            "collection": ""
-          }
-        }
-      },
-      "block_order": [
-        "collection-0",
-        "product",
-        "collection-1"
-      ],
-      "settings": {
-        "heading": "Multimedia collage",
-        "heading_size": "h2",
-        "desktop_layout": "left",
-        "mobile_layout": "collage",
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "video": {
-      "type": "video",
-      "settings": {
-        "heading": "",
-        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "heading_size": "h1",
-        "description": "",
-        "full_width": false,
-        "color_scheme": "scheme-1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "multicolumn": {
-      "type": "multicolumn",
-      "blocks": {
-        "column1": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column2": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column3": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "column1",
-        "column2",
-        "column3"
-      ],
-      "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "image_width": "third",
-        "image_ratio": "adapt",
-        "columns_desktop": 3,
-        "column_alignment": "center",
-        "background_style": "none",
-        "button_label": "",
-        "button_link": "",
-        "swipe_on_mobile": false,
-        "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
+      "block_order": ["stat-group-1", "stat-group-2", "cta-1"],
+      "settings": {}
     }
   },
-  "order": [
-    "image_banner",
-    "rich_text",
-    "featured_collection",
-    "collage",
-    "video",
-    "multicolumn"
-  ]
+  "order": ["hero-split", "image-with-stats"]
 }
