@@ -54,19 +54,24 @@
         <p class="hero-split__body">{{ section.settings.subtext }}</p>
       {%- endif -%}
 
-      {%- assign cta_blocks = section.blocks | where: 'type', 'cta' -%}
-      {%- if cta_blocks.size > 0 -%}
+      {%- assign has_cta = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'cta' -%}{%- assign has_cta = true -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if has_cta -%}
         <div class="hero-split__actions">
-          {%- for block in cta_blocks -%}
-            <a
-              {% if block.settings.url != blank %}href="{{ block.settings.url }}"{% endif %}
-              class="hero-split__cta hero-split__cta--{{ block.settings.style }}"
-              style="--cta-py: {{ block.settings.padding_y }}px; --cta-px: {{ block.settings.padding_x }}px;"
-              {% if block.settings.url == blank %}aria-disabled="true"{% endif %}
-              {{ block.shopify_attributes }}
-            >
-              {{ block.settings.label }}
-            </a>
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'cta' -%}
+              <a
+                {% if block.settings.url != blank %}href="{{ block.settings.url }}"{% endif %}
+                class="hero-split__cta hero-split__cta--{{ block.settings.style }}"
+                style="--cta-py: {{ block.settings.padding_y }}px; --cta-px: {{ block.settings.padding_x }}px;"
+                {% if block.settings.url == blank %}aria-disabled="true"{% endif %}
+                {{ block.shopify_attributes }}
+              >
+                {{ block.settings.label }}
+              </a>
+            {%- endif -%}
           {%- endfor -%}
         </div>
       {%- endif -%}
